@@ -24,7 +24,7 @@ public class CreateExpenseTests
         var expense = service.Create(10, "Food");
 
         var retrieved = service.Retrieve(expense.Id);
-        Assert.Equal(10, expense.Amount);
-        Assert.Equal("Food", expense.CategoryName);
+        Assert.Equal(10, retrieved.Amount);
+        Assert.Equal("Food", retrieved.CategoryName);
     }
 }
