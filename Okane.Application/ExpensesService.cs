@@ -2,6 +2,6 @@ namespace Okane.Application;
 
 public class ExpensesService
 {
-    public Expense Exec(int amount, string category) => 
+    public Expense Create(int amount, string category) => 
         new(amount, category);
 }
