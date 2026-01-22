@@ -18,4 +18,6 @@ public class ExpensesService(List<Expense> expenses)
         var expense = expenses.FirstOrDefault(e => e.Id == expenseId);
         return expense;
     }
+
+    public IEnumerable<Expense> All() => expenses;
 }

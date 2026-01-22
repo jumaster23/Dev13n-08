@@ -17,21 +17,19 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapPost("/expenses", 
-    (ExpensesService service, CreateExpenseRequest request) =>
-    {
-        var response = service.Create(request);
-        return Results.Created("/expenses", response);
-    });
+    (ExpensesService service, CreateExpenseRequest request) => 
+        Results.Created("/expenses", service.Create(request)));
 
 app.MapGet("/expenses/{id}", 
     (ExpensesService service, int id) =>
     {
         var response = service.Retrieve(id);
         
+        // TODO: Remove this logic
         if  (response == null)
             return Results.NotFound();
         
-        return Results.Created("/expenses", response);
+        return Results.Ok(response);
     });
 
 app.Run();
