@@ -4,11 +4,19 @@ namespace Okane.Tests;
 
 public class ExpensesServiceTests
 {
+    private readonly ExpensesService _service;
+    private List<Expense> _expenses;
+
+    public ExpensesServiceTests()
+    {
+        _expenses = new List<Expense>();
+        _service = new ExpensesService(_expenses);
+    }
+
     [Fact]
     public void Create_Response()
     {
-        var service = new ExpensesService([]);
-        var expense = service.Create(new(10, "Food"));
+        var expense = _service.Create(new(10, "Food"));
 
         Assert.Equal(10, expense.Amount);
         Assert.Equal("Food", expense.CategoryName);
@@ -17,12 +25,12 @@ public class ExpensesServiceTests
     [Fact]
     public void Create_AddsExpense()
     {
-        var expenses = new List<Expense>();
-        var service = new ExpensesService(expenses);
+        _expenses = new List<Expense>();
         
-        var expense = service.Create(new(10, "Food"));
+        
+        var expense = _service.Create(new(10, "Food"));
 
-        var retrieved = service.Retrieve(expense.Id);
+        var retrieved = _service.Retrieve(expense.Id);
         
         Assert.NotNull(retrieved);
         Assert.Equal(10, retrieved.Amount);
@@ -32,10 +40,7 @@ public class ExpensesServiceTests
     [Fact]
     public void Retrieve_NotFound()
     {
-        var expenses = new List<Expense>();
-        var service = new ExpensesService(expenses);
-
-        var retrieved = service.Retrieve(1);
+        var retrieved = _service.Retrieve(1);
         
         Assert.Null(retrieved);
     }
@@ -43,13 +48,10 @@ public class ExpensesServiceTests
     [Fact]
     public void All()
     {
-        var expenses = new List<Expense>();
-        var service = new ExpensesService(expenses);
-
-        service.Create(new(10, "Food"));
-        service.Create(new(20, "Drinks"));
+        _service.Create(new(10, "Food"));
+        _service.Create(new(20, "Drinks"));
         
-        var response = service.All().ToArray();
+        var response = _service.All().ToArray();
         
         Assert.Equal(2, response.Count());
         
