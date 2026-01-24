@@ -22,29 +22,14 @@ app.MapPost("/expenses",
         service.Create(request).ToHttpResult());
 
 app.MapGet("/expenses/{id}", 
-    (ExpensesService service, int id) =>
-    {
-        var response = service.Retrieve(id);
-        
-        return response == null ? Results.NotFound() : Results.Ok(response);
-    });
+    (ExpensesService service, int id) => service.Retrieve(id).ToHttpResult());
 
-app.MapGet("/expenses", (ExpensesService service) => Results.Ok(service.All()));
+app.MapGet("/expenses", (ExpensesService service) => service.All().ToHttpResult());
 
 app.MapPut("/expenses/{id}", 
-    (ExpensesService service, int id, UpdateExpenseRequest request) =>
-    {
-        var response = service.Update(id, request);
-        
-        return response == null ? Results.NotFound() : Results.Ok(response);
-    });
+    (ExpensesService service, int id, UpdateExpenseRequest request) => service.Update(id, request).ToHttpResult());
 
 app.MapDelete("/expenses/{id}", 
-    (ExpensesService service, int id) =>
-    {
-        var deleted = service.Delete(id);
-        
-        return deleted ? Results.NoContent() : Results.Ok();
-    });
+    (ExpensesService service, int id) => service.Delete(id).ToHttpResult());
 
 app.Run();

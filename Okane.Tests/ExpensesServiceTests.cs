@@ -5,141 +5,96 @@ namespace Okane.Tests;
 public class ExpensesServiceTests
 {
     private readonly ExpensesService _service;
-    private List<Expense> _expenses;
 
     public ExpensesServiceTests()
     {
-        _expenses = new List<Expense>();
-        _service = new ExpensesService(_expenses);
+        _service = new ExpensesService([]);
     }
 
     [Fact]
     public void Create_Response()
     {
-        var result = _service.Create(new(10, "Food"));
-        var okResult = Assert.IsType<OkResult<Expense>>(result);
-        var expense = okResult.Value;
-        
+        var expense = _service.Create(new(10, "Food")).AssertOk();
+
         Assert.Equal(10, expense.Amount);
         Assert.Equal("Food", expense.CategoryName);
     }
-    
-    [Fact]
-    public void Retrieve_NotFound()
-    {
-        var retrieved = _service.Retrieve(1);
-        
-        Assert.Null(retrieved);
-    }
-    
-    [Fact]
-    public void Retrieve_Updated()
-    {
-        var createResponse = _service.Create(
-            new(10, "Food")).AssertOk();
-        
-        var updated = _service.Update(createResponse.Id, 
-            new(20,  "Drinks"));
-        
-        var retrieved = _service.Retrieve(createResponse.Id);
-        Assert.NotNull(retrieved);
-        
-        Assert.Equal(20, retrieved.Amount);
-        Assert.Equal("Drinks", retrieved.CategoryName);
-    }
-    
-    [Fact]
-    public void Retrieve_OneExpense()
-    {
-        _expenses = new List<Expense>();
-        
-        
-        var expense = _service.Create(new(10, "Food")).AssertOk();
 
-        var retrieved = _service.Retrieve(expense.Id);
-        
-        Assert.NotNull(retrieved);
+    [Fact]
+    public void Create_InvalidAmount()
+    {
+        var message = _service.Create(new(-1, "Food")).AssertError();
+        Assert.Equal("Amount must be greater than 1.", message);
+    }
+
+    [Fact]
+    public void Retrieve_ExistingExpense()
+    {
+        var created = _service.Create(new(10, "Food")).AssertOk();
+
+        var retrieved = _service.Retrieve(created.Id).AssertOk();
+
         Assert.Equal(10, retrieved.Amount);
         Assert.Equal("Food", retrieved.CategoryName);
     }
-    
-    [Fact]
-    public void Retrieve_Deleted()
-    {
-        var createResponse = _service.Create(
-            new(10, "Food")).AssertOk();
 
-        var deleteResponse = _service.Delete(createResponse.Id);
-        Assert.True(deleteResponse);
-        
-        var retrieved = _service.Retrieve(createResponse.Id);
-        
-        Assert.Null(retrieved);
+    [Fact]
+    public void Retrieve_NotFound()
+    {
+        var message = _service.Retrieve(999).AssertNotFound();
+        Assert.Contains("not found", message);
     }
 
     [Fact]
-    public void All()
+    public void All_ReturnsAllExpenses()
     {
-        _service.Create(new(10, "Food"));
-        _service.Create(new(20, "Drinks"));
-        
-        var response = _service.All().ToArray();
-        
-        Assert.Equal(2, response.Count());
-        
-        var firstExpense = response.First();
-        Assert.Equal(10, firstExpense.Amount);
-        Assert.Equal("Food", firstExpense.CategoryName);
+        _service.Create(new(10, "Food")).AssertOk();
+        _service.Create(new(20, "Drinks")).AssertOk();
+
+        var all = _service.All().AssertOk().ToArray();
+
+        Assert.Equal(2, all.Length);
+        Assert.Contains(all, e => e.Amount == 10 && e.CategoryName == "Food");
+        Assert.Contains(all, e => e.Amount == 20 && e.CategoryName == "Drinks");
     }
 
     [Fact]
-    public void Update_Response()
+    public void Update_ExistingExpense()
     {
-        var createResponse = _service.Create(
-            new(10, "Food")).AssertOk();
-        
-        var updated = _service.Update(createResponse.Id, 
-            new(20,  "Drinks"));
-        
-        Assert.NotNull(updated);
-        
+        var created = _service.Create(new(10, "Food")).AssertOk();
+
+        var updated = _service.Update(created.Id, new(20, "Drinks")).AssertOk();
+
         Assert.Equal(20, updated.Amount);
         Assert.Equal("Drinks", updated.CategoryName);
     }
 
     [Fact]
-    public void Update_LesserThanOne()
+    public void Update_InvalidAmount()
     {
-        var message = _service.Create(new(-1, "Food")).AssertError();
-        
+        var message = _service.Update(1, new(-5, "Food")).AssertError();
         Assert.Equal("Amount must be greater than 1.", message);
     }
 
     [Fact]
     public void Update_NotFound()
     {
-        var updated = _service.Update( 999, 
-            new(20,  "Drinks"));
-        
-        Assert.Null(updated);
+        var message = _service.Update(999, new(20, "Drinks")).AssertNotFound();
+        Assert.Contains("not found", message);
     }
 
     [Fact]
-    public void Delete_Response()
+    public void Delete_ExistingExpense()
     {
-        var createResponse = _service.Create(
-            new(10, "Food")).AssertOk();
+        var created = _service.Create(new(10, "Food")).AssertOk();
 
-        var response = _service.Delete(createResponse.Id);
-        
-        Assert.True(response);
+        _service.Delete(created.Id).AssertOk();
     }
-    
+
     [Fact]
     public void Delete_NotFound()
     {
-        var response = _service.Delete(50);
-        
-        Assert.False(response);
+        var message = _service.Delete(999).AssertNotFound();
+        Assert.Contains("not found", message);
     }
 }
