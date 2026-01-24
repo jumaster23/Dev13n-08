@@ -1,9 +1,7 @@
 namespace Okane.Application;
 
-public class ExpensesService(List<Expense> expenses)
+public class ExpensesService(IRepository<Expense> expenses)
 {
-    private static int _lastId = 1;
-    
     public Result<ExpenseResponse> Create(CreateExpenseRequest request)
     {
         var (amount, categoryName) = request;
@@ -11,9 +9,12 @@ public class ExpensesService(List<Expense> expenses)
         if (amount < 1)
             return new ErrorResult<ExpenseResponse>(
                 $"{nameof(request.Amount)} must be greater than 1.");
-
-        var id = _lastId++;
-        var expense = new Expense(id, amount, categoryName);
+        
+        var expense = new Expense
+        {
+            Amount = request.Amount,
+            CategoryName = request.CategoryName
+        };
         expenses.Add(expense);
         
         var response = new ExpenseResponse(expense.Id, expense.Amount, expense.CategoryName);
@@ -22,7 +23,7 @@ public class ExpensesService(List<Expense> expenses)
 
     public Result<ExpenseResponse> Retrieve(int expenseId)
     {
-        var expense = expenses.FirstOrDefault(e => e.Id == expenseId);
+        var expense = expenses.ById(expenseId);
         
         if (expense is null)
             return new NotFoundResult<ExpenseResponse>(
@@ -35,7 +36,7 @@ public class ExpensesService(List<Expense> expenses)
 
     public Result<IEnumerable<ExpenseResponse>> All()
     {
-        var response = expenses
+        var response = expenses.All()
             .Select(expense => new ExpenseResponse(expense.Id, expense.Amount, expense.CategoryName));
         
         return new OkResult<IEnumerable<ExpenseResponse>>(response);
@@ -47,20 +48,11 @@ public class ExpensesService(List<Expense> expenses)
             return new ErrorResult<ExpenseResponse>(
                 $"{nameof(request.Amount)} must be greater than 1.");
 
-        var existing = expenses.FirstOrDefault(e => e.Id == id);
-
-        if (existing is null)
+        if (!expenses.Exists(id))
             return new NotFoundResult<ExpenseResponse>(
                 $"Expense with id {id} was not found.");
 
-        expenses.Remove(existing);
-
-        var updated = new Expense(
-            id,
-            request.Amount,
-            request.CategoryName);
-
-        expenses.Add(updated);
+        var updated = expenses.Update(id, request);
         
         var response = new ExpenseResponse(updated.Id, updated.Amount, updated.CategoryName);
         return new OkResult<ExpenseResponse>(response);
@@ -68,13 +60,11 @@ public class ExpensesService(List<Expense> expenses)
 
     public Result Delete(int id)
     {
-        var expense = expenses.FirstOrDefault(e => e.Id == id);
-
-        if (expense is null)
+        if (!expenses.Exists(id))
             return new NotFoundResult(
                 $"Expense with id {id} was not found.");
 
-        expenses.Remove(expense);
+        expenses.Remove(id);
 
         return new OkResult();
     }

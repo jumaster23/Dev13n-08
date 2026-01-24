@@ -8,7 +8,7 @@ public class ExpensesServiceTests
 
     public ExpensesServiceTests()
     {
-        _service = new ExpensesService([]);
+        _service = new ExpensesService(new InMemoryRepository<Expense>());
     }
 
     [Fact]
