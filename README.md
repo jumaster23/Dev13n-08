@@ -13,3 +13,7 @@ Personal finance app, demo for module devn13-08
 ```bash
 dotnet tool install --global dotnet-ef --version 9.0.12
 ```
+
+### PgAdmin (For DB Visualization)
+
+[Download](https://www.pgadmin.org/download/#/) and install.
