@@ -38,11 +38,7 @@ public class ExpensesService(
     public Result<IEnumerable<ExpenseResponse>> All()
     {
         var response = expenses.All()
-            .Select(expense => new ExpenseResponse(
-                expense.Id,
-                expense.Amount,
-                expense.CategoryName,
-                expense.Description));
+            .Select(expenseResponseFactory.Create);
 
         return new OkResult<IEnumerable<ExpenseResponse>>(response);
     }
