@@ -6,10 +6,8 @@ public class ExpensesServiceTests
 {
     private readonly ExpensesService _service;
 
-    public ExpensesServiceTests()
-    {
-        _service = new ExpensesService(new InMemoryRepository<Expense>());
-    }
+    public ExpensesServiceTests() => 
+        _service = new ExpensesService(new InMemoryRepository<Expense>(), new ExpenseResponseFactory());
 
     [Fact]
     public void Create_Response()
