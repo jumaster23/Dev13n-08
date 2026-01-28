@@ -9,6 +9,7 @@ builder.Services
     .AddOpenApi()
     .AddTransient<ExpensesService>()
     .AddTransient<IRepository<Expense>, ExpensesRepository>()
+    .AddTransient<ExpenseResponseFactory>()
     .AddDbContext<OkaneDbContext>(options => 
         options.UseNpgsql(
             builder.Configuration.GetConnectionString("Default"),
