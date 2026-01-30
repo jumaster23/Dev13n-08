@@ -1,6 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
+using Okane.Domain;
 
-namespace Okane.Application;
+namespace Okane.Application.Expenses;
 
 public abstract class InMemoryRepository<T> : IRepository<T> where T : IEntity
 {

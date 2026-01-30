@@ -1,3 +1,5 @@
+using Okane.Domain;
+
 namespace Okane.Application;
 
 public interface IRepository<T> where T : IEntity

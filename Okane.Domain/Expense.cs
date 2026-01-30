@@ -1,4 +1,4 @@
-namespace Okane.Application;
+namespace Okane.Domain;
 
 public class Expense : IEntity
 {

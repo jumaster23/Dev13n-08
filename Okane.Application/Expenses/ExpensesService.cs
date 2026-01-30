@@ -1,4 +1,7 @@
-namespace Okane.Application;
+using Okane.Application.Categories;
+using Okane.Domain;
+
+namespace Okane.Application.Expenses;
 
 public class ExpensesService(
     IExpensesRepository expenses,

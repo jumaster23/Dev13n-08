@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Okane.Application;
+using Okane.Application.Expenses;
+using Okane.Domain;
 
 namespace Okane.Storage.EntityFramework;
 

@@ -1,4 +1,7 @@
-namespace Okane.Application;
+using Okane.Application.Expenses;
+using Okane.Domain;
+
+namespace Okane.Application.Categories;
 
 public class CategoriesService(ICategoriesRepository categories, IExpensesRepository expenses)
 {

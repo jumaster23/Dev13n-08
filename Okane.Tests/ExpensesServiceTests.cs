@@ -1,4 +1,7 @@
 ﻿using Okane.Application;
+using Okane.Application.Categories;
+using Okane.Application.Expenses;
+using Okane.Domain;
 
 namespace Okane.Tests;
 

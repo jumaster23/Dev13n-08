@@ -1,3 +1,3 @@
-namespace Okane.Application;
+namespace Okane.Application.Categories;
 
 public record CategoryResponse(int Id, string Name);

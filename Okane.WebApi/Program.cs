@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Okane.Application;
+using Okane.Application.Categories;
+using Okane.Application.Expenses;
 using Okane.Storage.EntityFramework;
 using Okane.WebApi;
 

@@ -1,4 +1,6 @@
-namespace Okane.Application;
+using Okane.Domain;
+
+namespace Okane.Application.Expenses;
 
 public class ExpenseResponseFactory
 {
