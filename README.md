@@ -18,8 +18,4 @@ dotnet tool install --global dotnet-ef --version 9.0.12
 
 [Download](https://www.pgadmin.org/download/#/) and install.
 
-## Adding a new migration
 
-```bash
-dotnet ef migrations add [migration-name] --project=Okane.Storage.EntityFramework
-```
