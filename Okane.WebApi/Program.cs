@@ -51,6 +51,14 @@ app.MapPost("/categories/{id}",
     (CategoriesService service, int id) => 
         service.Retrieve(id).ToHttpResult());
 
+app.MapPut("/categories/{id}", 
+    (CategoriesService service, int id, UpdateCategoryRequest request) => 
+        service.Update(request with { Id =  id })
+            .ToHttpResult()); 
+
+app.MapDelete("/categories/{id}", 
+    (CategoriesService service, int id) => service.Remove(id).ToHttpResult());
+
 app.MapGet("/categories", (CategoriesService service) => service.All().ToHttpResult());
 
 app.Run();
