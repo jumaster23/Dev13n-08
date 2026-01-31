@@ -6,6 +6,7 @@ using Okane.Application.Expenses;
 using Okane.Storage.EntityFramework;
 using Okane.Storage.InMemory;
 using Okane.WebApi;
+using Okane.WebApi.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,7 @@ builder.Services
     .AddTransient<IExpensesRepository, ExpensesRepository>()
     .AddTransient<ICategoriesRepository, CategoriesRepository>()
     .AddTransient<IUsersRepository, UsersRepository>()
-    .AddTransient<IPasswordHasher, FakePasswordHasher>()
+    .AddTransient<IPasswordHasher, PasswordHasher>()
     .AddTransient<ITokenGenerator, FakeTokenGenerator>()
     .AddTransient<ExpenseResponseFactory>()
     .AddDbContext<OkaneDbContext>(options => 
