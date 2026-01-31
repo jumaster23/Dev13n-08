@@ -10,6 +10,7 @@ public static class ResultExtensions
             ErrorResult<T> errorResult => Results.BadRequest(errorResult),
             NotFoundResult<T> notFoundResult => Results.NotFound(notFoundResult),
             OkResult<T> okResult => Results.Ok(okResult.Value),
+            UnauthorizedResult<T> => Results.Unauthorized(),
             _ => throw new ArgumentOutOfRangeException(nameof(result))
         };
     

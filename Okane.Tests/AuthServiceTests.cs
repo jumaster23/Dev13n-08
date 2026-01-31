@@ -8,7 +8,10 @@ public class AuthServiceTests
     private readonly AuthService _service;
 
     public AuthServiceTests() => 
-        _service = new AuthService(new InMemoryUsersRepository(), new FakePasswordHasher(), new FakeTokenGenerator());
+        _service = new AuthService(
+            new InMemoryUsersRepository(), 
+            new FakePasswordHasher(), 
+            new FakeTokenGenerator());
 
     [Fact]
     public void SignUp()

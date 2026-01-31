@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Okane.Application;
+using Okane.Application.Auth;
 using Okane.Application.Categories;
 using Okane.Application.Expenses;
 using Okane.Storage.EntityFramework;
+using Okane.Storage.InMemory;
 using Okane.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +13,12 @@ builder.Services
     .AddOpenApi()
     .AddTransient<ExpensesService>()
     .AddTransient<CategoriesService>()
+    .AddTransient<AuthService>()
     .AddTransient<IExpensesRepository, ExpensesRepository>()
     .AddTransient<ICategoriesRepository, CategoriesRepository>()
+    .AddTransient<IUsersRepository, UsersRepository>()
+    .AddTransient<IPasswordHasher, FakePasswordHasher>()
+    .AddTransient<ITokenGenerator, FakeTokenGenerator>()
     .AddTransient<ExpenseResponseFactory>()
     .AddDbContext<OkaneDbContext>(options => 
         options.UseNpgsql(
@@ -60,5 +66,11 @@ app.MapDelete("/categories/{id}",
     (CategoriesService service, int id) => service.Remove(id).ToHttpResult());
 
 app.MapGet("/categories", (CategoriesService service) => service.All().ToHttpResult());
+
+app.MapPost("/auth/signup", (AuthService service, SignUpRequest request) => 
+    service.SignUp(request).ToHttpResult());
+
+app.MapPost("/auth/token", (AuthService service, SignInRequest request) => 
+    service.SignIn(request).ToHttpResult());
 
 app.Run();

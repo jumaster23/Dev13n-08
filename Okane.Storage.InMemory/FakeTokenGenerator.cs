@@ -1,7 +1,7 @@
 using Okane.Application.Auth;
 using Okane.Domain;
 
-namespace Okane.Tests;
+namespace Okane.Storage.InMemory;
 
 public class FakeTokenGenerator : ITokenGenerator
 {

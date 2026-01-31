@@ -1,6 +1,6 @@
 using Okane.Application.Auth;
 
-namespace Okane.Tests;
+namespace Okane.Storage.InMemory;
 
 public class FakePasswordHasher : IPasswordHasher
 {

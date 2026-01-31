@@ -8,6 +8,7 @@ public class OkaneDbContext(DbContextOptions<OkaneDbContext> options) : DbContex
 {
     public DbSet<Expense> Expenses => Set<Expense>();
     public DbSet<Category> Categories => Set<Category>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) => 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(OkaneDbContext).Assembly);
