@@ -35,4 +35,10 @@ public static class ResultExtensions
         var notFoundResult = Assert.IsType<NotFoundResult<T>>(result);
         return notFoundResult.Message;
     }
+    
+    public static string AssertUnauthorized<T>(this Result<T> result)
+    {
+        var unauthorizedResult = Assert.IsType<UnauthorizedResult<T>>(result);
+        return unauthorizedResult.Message;
+    }
 }

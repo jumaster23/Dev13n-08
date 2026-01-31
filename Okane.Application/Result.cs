@@ -15,3 +15,5 @@ public record ErrorResult<T>(string Message) : Result<T>;
 public record OkResult<T>(T Value) : Result<T>;
 
 public record NotFoundResult<T>(string Message) : Result<T>;
+
+public record UnauthorizedResult<T>(string Message) : Result<T>;
