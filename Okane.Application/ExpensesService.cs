@@ -26,11 +26,26 @@ public class ExpensesService(List<Expense> expenses)
 
     public Expense? Update(UpdateExpenseRequest request)
     {
-        throw new NotImplementedException();
+        var expense = expenses.FirstOrDefault(e => e.Id == request.Id);
+        if (expense == null) return null;
+        
+        int index = expenses.IndexOf(expense);
+        
+        var updatedExpense = new Expense(request.Id, request.Amount, request.CategoryName);
+        expenses[index] = updatedExpense;
+
+        return updatedExpense;
     }
 
     public bool Delete(int id)
     {
-        throw new NotImplementedException();
+        var expense = expenses.FirstOrDefault(e => e.Id == id);
+        
+        if (expense == null)
+        {
+            return false;
+        }
+        
+        return expenses.Remove(expense);
     }
 }
