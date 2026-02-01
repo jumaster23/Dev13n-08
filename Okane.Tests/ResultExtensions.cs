@@ -12,6 +12,12 @@ public static class ResultExtensions
         return okResult.Value;
     }
 
+    public static string AssertError(this Result result)
+    {
+        var errorResult = Assert.IsType<ErrorResult>(result);
+        return errorResult.Message;
+    }
+    
     public static string AssertError<T>(this Result<T> result)
     {
         var errorResult = Assert.IsType<ErrorResult<T>>(result);
