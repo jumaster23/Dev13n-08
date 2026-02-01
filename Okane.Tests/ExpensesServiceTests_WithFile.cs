@@ -6,20 +6,23 @@ public class ExpensesServiceTests_WithFile : IDisposable
 {
     private readonly ExpensesService _service;
 
-    // Before each test
     public ExpensesServiceTests_WithFile()
     {
-        // TODO: Create file
+        if (File.Exists("expenses.txt"))
+        {
+            File.Delete("expenses.txt");
+        }
         
         _service = new ExpensesService(new FileExpensesRepository());
     }
     
-    // After each test
     public void Dispose()
     {
-        // TODO: Delete file
+        if (File.Exists("expenses.txt"))
+        {
+            File.Delete("expenses.txt");
+        }
     }
-
     [Fact]
     public void Create_Response()
     {

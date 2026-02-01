@@ -12,6 +12,7 @@ public class ExpensesService(IRepository<Expense> expenses)
         
         var expense = new Expense
         {
+            
             Amount = request.Amount,
             CategoryName = request.CategoryName
         };
